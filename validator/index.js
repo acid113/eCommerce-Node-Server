@@ -23,3 +23,21 @@ exports.userSignUpValidator = (req, res, next) => {
 
     next(); // ? add this so the application will not stop
 };
+
+exports.userSignInValidator = (req, res, next) => {
+    console.log('inside validator => userSignValidator()');
+    console.log('req.body', req.body);
+
+    req.check('email', 'Email is required').notEmpty();
+    req.check('password', 'Password is required').notEmpty();
+
+    const errors = req.validationErrors();
+    if (errors) {
+        const firstError = errors.map((error) => error.msg)[0];
+        return res.status(400).json({
+            error: firstError
+        });
+    }
+
+    next();
+};

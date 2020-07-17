@@ -37,6 +37,7 @@ exports.list = (req, res) => {
      * http://localhost:8000/api/products?sortBy=price&&orderBy=asc
      */
 
+    // * check if url parameters exists, else use default params
     let orderBy = req.query.orderBy ? req.query.orderBy : 'asc';
     let sortBy = req.query.sortBy ? req.query.sortBy : 'name';
     let limit = req.query.limit ? parseInt(req.query.limit) : 5;
@@ -312,10 +313,12 @@ exports.getPhoto = (req, res, next) => {
 
     // ? req.product is populated by findProductById() since we passed "productId" param
     if (req.product.photo.data) {
-        console.log('photo data exists');
+        console.log('Success: photo data exists');
         // * we're returning a photo object to be displayed
         res.set('Content-Type', req.product.photo.contentType);
         return res.send(req.product.photo.data);
+    } else {
+        console.log('Error: no photo data');
     }
 
     next();

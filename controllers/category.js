@@ -65,8 +65,8 @@ exports.create = (req, res) => {
 
     category.save((err, data) => {
         if (err) {
-            // console.log(errorHandler(err));
             console.log('error creating category');
+            console.log(errorHandler(err));
             return res.status(400).json({
                 error: errorHandler(err)
             });
@@ -94,6 +94,8 @@ exports.update = (req, res) => {
         }
 
         console.log(`success updating category: ${data.name}`);
-        res.json({data});
+
+        // res.json({data});
+        res.json(data); // ? returns the same json structure as above
     });
 };

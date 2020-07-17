@@ -8,14 +8,18 @@ const {sendGreeting, signUp, signIn, signOut, requireSignIn} = require('../contr
 //   res.send("hello from ecommerce router/user.js node");
 // });
 
-// * calls sendGreeting() from controller
-router.get('/user/sendgreeting', sendGreeting);
-router.post('/auth/signup', userSignUpValidator, signUp); // ? added validation before signUp() is called
-router.post('/auth/signin', userSignValidator, signIn);
-router.post('/auth/signout', signOut);
-
+// * test API that requires user to sign in
 router.get('/auth/test', requireSignIn, (req, res) => {
     res.send('auth test route');
 });
+
+// * calls sendGreeting() from controller
+router.get('/user/sendgreeting', sendGreeting);
+
+// ? added validation before signUp() is called
+router.post('/auth/signup', userSignUpValidator, signUp);
+router.post('/auth/signin', userSignValidator, signIn);
+
+router.post('/auth/signout', signOut);
 
 module.exports = router;

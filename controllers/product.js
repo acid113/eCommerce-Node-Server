@@ -31,7 +31,7 @@ exports.list = (req, res) => {
     console.log('getting list of products');
 
     /*
-     * sample URLs
+     * sample URLs -> params are CASE-SENSITIVE and should match the whole word
      * http://localhost:8000/api/products
      * http://localhost:8000/api/products?sortBy=name&&orderBy=desc&limit=2
      * http://localhost:8000/api/products?sortBy=price&&orderBy=asc
@@ -40,7 +40,7 @@ exports.list = (req, res) => {
     // * check if url parameters exists, else use default params
     let orderBy = req.query.orderBy ? req.query.orderBy : 'asc';
     let sortBy = req.query.sortBy ? req.query.sortBy : 'name';
-    let limit = req.query.limit ? parseInt(req.query.limit) : 5;
+    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
 
     Product.find()
         .select('-photo') // ? exclude photo due to size issue of data
@@ -132,6 +132,7 @@ exports.listCategories = (req, res) => {
 };
 
 exports.listBySearch = (req, res) => {
+    // * params added in req.body are CASE-SENSITIVE and should match the whole word
     console.log('list products by search');
     let order = req.body.order ? req.body.order : 'desc';
     let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
@@ -139,12 +140,14 @@ exports.listBySearch = (req, res) => {
     let skip = parseInt(req.body.skip);
     let findArgs = {};
 
-    // console.log(order, sortBy, limit, skip, req.body.filters);
-    // console.log("findArgs", findArgs);
+    console.log(order, sortBy, limit, skip, req.body.filters);
+    console.log('findArgs', findArgs);
 
     for (let key in req.body.filters) {
         if (req.body.filters[key].length > 0) {
             if (key === 'price') {
+                // * sample price range input -> [0, 10] with minimum = 0 and maximum = 10
+
                 // gte -  greater than price [0-10]
                 // lte - less than
                 findArgs[key] = {
